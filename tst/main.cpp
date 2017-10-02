@@ -1,29 +1,44 @@
 #define CATCH_CONFIG_MAIN
 
 #include <cstring>
+
 #include "catch.hpp"
 #include "../src/Str.h"
 
-using std::strcmp;
+using std::strlen;
+
+bool cmp(const Str& s1, const char* s2) {
+    if (s1.size() != strlen(s2)) {
+        return false;
+    }
+
+    for (Str::size_type i = 0; i < s1.size(); ++i) {
+        if (s1[i] != s2[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 TEST_CASE("Str") {
     SECTION("Should construct object using default constructor") {
         Str str;
-        REQUIRE(str.begin() == NULL);
-        REQUIRE(str.end() == NULL);
+        REQUIRE(str.begin() == nullptr);
+        REQUIRE(str.end() == nullptr);
     }
 
     SECTION("Should construct object using string literal constructor") {
         Str str("hello");
 
-        REQUIRE(strncmp(str.begin(), "hello", str.size()) == 0);
+        REQUIRE(cmp(str, "hello"));
     }
 
     SECTION("Should construct object using copy constructor") {
         Str str("hello");
         Str str_copy(str);
 
-        REQUIRE(strncmp(str_copy.begin(), "hello", str_copy.size()) == 0);
+        REQUIRE(cmp(str_copy, "hello"));
     }
 
     SECTION("Should append another Str using `+=` operator") {
@@ -31,7 +46,7 @@ TEST_CASE("Str") {
         Str str2("world");
         str1 += str2;
 
-        REQUIRE(strncmp(str1.begin(), "helloworld", str1.size()) == 0);
+        REQUIRE(cmp(str1, "helloworld"));
     }
 
     SECTION("Should concat 2 Strs using `+` operator") {
@@ -39,36 +54,22 @@ TEST_CASE("Str") {
         Str str2("world");
         Str str1str2  = str1 + str2;
 
-        REQUIRE(strncmp(str1str2.begin(), "helloworld", str1str2.size()) == 0);
+        REQUIRE(cmp(str1str2, "helloworld"));
     }
 
     SECTION("Should push char using `push_back` member function") {
         Str str("hell");
         str.push_back('o');
 
-        REQUIRE(strncmp(str.begin(), "hello", str.size()) == 0);
+        REQUIRE(cmp(str, "hello"));
     }
 
     SECTION("Should clear string using `clear` member function") {
         Str str("hello");
         str.clear();
 
-        REQUIRE(str.begin() == NULL);
-        REQUIRE(str.end() == NULL);
-    }
-
-    SECTION("Should return lowercase string using `tolower` member function") {
-        Str str("Hello");
-        Str str_lower = str.tolower();
-
-        REQUIRE(strncmp(str_lower.begin(), "hello", str_lower.size()) == 0);
-    }
-
-    SECTION("Should allow access to chars via `[]` operator") {
-        Str str("hello");
-
-        REQUIRE(str[0] == 'h');
-        REQUIRE(str[4] == 'o');
+        REQUIRE(str.begin() == nullptr);
+        REQUIRE(str.end() == nullptr);
     }
 
     SECTION("Should assign value via `=` operator") {
@@ -77,6 +78,6 @@ TEST_CASE("Str") {
 
         str2 = str1;
 
-        REQUIRE(strncmp(str2.begin(), "hello", str2.size()) == 0);
+        REQUIRE(cmp(str2, "hello"));
     }
 }

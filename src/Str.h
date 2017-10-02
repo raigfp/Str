@@ -1,5 +1,5 @@
-#ifndef STR_H
-#define STR_H
+#ifndef STR_STR_H
+#define STR_STR_H
 
 #include <memory>
 #include <istream>
@@ -32,15 +32,6 @@ public:
         unchecked_append(val);
     }
     void clear() { uncreate(); }
-    Str tolower() const {
-        Str s(*this);
-
-        for (Str::iterator iter = s.begin(); iter != s.end(); ++iter) {
-            *iter = std::tolower(*iter);
-        }
-
-        return s;
-    }
 
     char& operator[](size_type i) { return data[i]; }
     const char& operator[](size_type i) const { return data[i]; }
@@ -67,7 +58,5 @@ private:
 Str operator+(const Str&, const Str&);
 std::ostream& operator<<(std::ostream&, const Str&);
 std::istream& operator>>(std::istream&, Str&);
-bool operator>(const Str&, const Str&);
-bool operator<(const Str&, const Str&);
 
-#endif // STR_H
+#endif // STR_STR_H

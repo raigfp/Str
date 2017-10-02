@@ -1,11 +1,11 @@
-#include "Str.h"
-
 #include <cstring>
 #include <cctype>
 #include <memory>
 #include <istream>
 #include <ostream>
 #include <algorithm>
+
+#include "Str.h"
 
 using std::istream;
 using std::ostream;
@@ -16,7 +16,7 @@ using std::strncmp;
 using std::max;
 
 void Str::create() {
-    data = avail = limit = 0;
+    data = avail = limit = nullptr;
 }
 
 void Str::create(const_iterator i, const_iterator j) {
@@ -38,7 +38,7 @@ void Str::uncreate() {
         alloc.deallocate(data, limit - data);
     }
 
-    data = avail = limit = 0;
+    data = avail = limit = nullptr;
 }
 
 void Str::grow() {
@@ -69,8 +69,8 @@ Str& Str::operator=(const Str& rhs) {
 }
 
 Str& Str::operator+=(const Str& rhs) {
-    for (Str::const_iterator iter = rhs.begin(); iter != rhs.end(); ++iter) {
-        this->push_back(*iter);
+    for (const auto& c : rhs) {
+        this->push_back(c);
     }
 
     return *this;
@@ -83,8 +83,8 @@ Str operator+(const Str& s1, const Str& s2) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Str& s) {
-    for (Str::const_iterator iter = s.begin(); iter != s.end(); ++iter) {
-        os << *iter;
+    for (const auto& c : s) {
+        os << c;
     }
 
     return os;
@@ -94,11 +94,14 @@ istream& operator>>(istream& is, Str& s) {
     s.clear();
 
     char c;
-    while(is.get(c) && isspace(c)); // skip spaces
+    while(is.get(c) && isspace(c)) {
+        // skip spaces
+    }
 
     if (is) {
-        do s.push_back(c);
-        while (is.get(c) && !isspace(c));
+        do {
+            s.push_back(c);
+        } while (is.get(c) && !isspace(c));
 
         if (is) {
             is.unget();
@@ -106,14 +109,4 @@ istream& operator>>(istream& is, Str& s) {
     }
 
     return is;
-}
-
-bool operator>(const Str& lhs, const Str& rhs) {
-    Str::size_type max_size = max(lhs.size(), rhs.size());
-    return strncmp(lhs.begin(), rhs.begin(), max_size) > 0;
-}
-
-bool operator<(const Str& lhs, const Str& rhs) {
-    Str::size_type max_size = max(lhs.size(), rhs.size());
-    return strncmp(lhs.begin(), rhs.begin(), max_size) < 0;
 }

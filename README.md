@@ -1,13 +1,20 @@
-# Str
+# Dynamic string class
 
-## Main
+## Build
 ```
-g++ src/Str.cpp src/main.cpp && ./a.out < input
+mkdir build && cd build
+cmake ..
+make
 ```
 
-## Tests
+## Run example
 ```
-g++ src/Str.cpp tst/main.cpp && ./a.out
+./src/str_cpp < ../input
+```
+
+## Run tests
+```
+./tst/tst -s
 ```
 
 Tested with `g++ (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609`
